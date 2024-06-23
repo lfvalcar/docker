@@ -44,17 +44,16 @@ configSSH(){ # Función de configuración del servicio SSH
             mkdir -v /var/run/sshd
         fi
 
-        # Comprobar si existe el directorio .ssh en el home del usuario administrador
-        if [ ! -d "/home/${adminUser}/.ssh" ]
-        then
-            if [ ! -d "/home/${adminUser}" ]
-            then
-                # Crear el directorio .ssh en el usuario administrador
-                echo "No existe el home del usuario ${adminUser}"
-                return 1
-            fi 
+        # Comprobar si existe el directorio home del usuario administrador
+        if [ ! -d "/home/$adminUser" ]; then
             # Crear el directorio .ssh en el usuario administrador
-            mkdir -v /home/${adminUser}/.ssh
+            echo "No existe el home del usuario $adminUser"
+            return 1
+        fi
+
+        # Si existe el directorio .ssh, otorgarle permisos al usuario administrador
+        if [ d /home/$adminUser/.ssh ]; then
+            chown $adminUser:sudo /home/$adminUser/.ssh
         fi
 
         return 0 # Servicio SSH configurado con éxito
