@@ -1,0 +1,10 @@
+services:
+  dns:
+    image: lfvalcar/dns-bind9
+    environment:
+      - dirZones=/etc/bind/zones
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    volumes:
+      - ./volumes/zones:/etc/bind/zones:r

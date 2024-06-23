@@ -1,0 +1,25 @@
+# Dockerfile servicio DNS
+FROM ubuntu:latest
+
+# Variables necesarias para el funcionamiento del script startDNS.sh
+# $dirZones = Directorio donde se almacenarán los archivos con los registros de las zonas
+
+# Variables de entorno en el dockerfile
+ENV TZ Europe/Madrid
+ENV DEBIAN_FRONTEND noninteractive
+
+# Establecer la zona horaria
+RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone
+
+# Actualizar la lista de paquetes e instalar el paquete DNS
+RUN apt update -yq && apt install -yq bind9
+
+# Exponer los puertos que utiliza el servicio
+EXPOSE 53
+EXPOSE 53/udp
+
+# Copiar el script de configuración del servicio DNS en el directorio /root
+COPY ./config /root/config
+
+# Ejecutar el script de inicialización del servicio DNS
+CMD [ "bash", "/root/config/startDNS.sh" ]
