@@ -12,7 +12,9 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone
 
 # Actualizar la lista de paquetes e instalar el paquete DNS
-RUN apt update -yq && apt install -yq bind9
+RUN apt update -yq && apt install -yq bind9 \
+    # Limpiar caché de apt
+    && apt clean -yq
 
 # Exponer los puertos que utiliza el servicio
 EXPOSE 53
