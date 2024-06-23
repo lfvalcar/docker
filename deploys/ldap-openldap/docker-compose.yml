@@ -1,0 +1,6 @@
+services:
+  ldap-formateya:
+    image: lfvalcar/ldap-openldap
+    hostname: dc.test.local
+    ports:
+      - "139:139"

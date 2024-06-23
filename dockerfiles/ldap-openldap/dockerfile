@@ -1,0 +1,36 @@
+# Dockerfile servicio LDAP
+FROM ubuntu:latest
+
+# Variables necesarias para el funcionamiento del script startLDAP.sh
+# $dirConfig = Directorio que contiene los scripts y archivos de configuración del 
+#              servicio LDAP
+
+# Variables opcionales para el funcionamiento del script startLDAP.sh
+# $dc1 = Subdominio
+# $dc2 = Dominio
+# $organization = Organización del dominio
+# $initialLDIF - Archivo con una esquema inicial de ou,grupos,usuarios a añadir
+# $adminLDAPasswd - Contraseña del usuario administrador del directorio
+
+# Archivos opcionales para la configuración del servicio LDAP
+# $initialLDIF = Archivo que contiene entradas ldif para rellenar
+
+# Variables del dockerfile
+ENV TZ Europe/Madrid
+ENV DEBIAN_FRONTEND noninteractive
+ENV dirConfig /root/config
+
+# Establecer la zona horaria
+RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone
+
+# Se actualiza la lista de paquetes y se instala los paquetes necesarios
+RUN apt update -yq && apt install debconf-utils -yq
+
+# Copiar archivos de configuración del demonio slapd
+COPY ./config ${dirConfig}
+
+# Exponer puerto del servicio LDAP
+EXPOSE 139
+
+# Ejecutar el script de inicialización del servicio LDAP
+CMD [ "bash", "/root/config/startLDAP.sh" ]
