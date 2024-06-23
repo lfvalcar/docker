@@ -1,0 +1,2 @@
+# Interfaz de escucha del protocolo DHCP (host)
+IFACE=enp0s3

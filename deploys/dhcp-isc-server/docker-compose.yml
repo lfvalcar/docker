@@ -1,0 +1,8 @@
+services:
+  dhcp:
+    image: lfvalcar/dhcp-isc-server
+    env_file:
+      - environment.yml
+    volumes:
+      - ./volumes/leases:/var/lib/dhcp:rw
+    network_mode: host

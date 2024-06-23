@@ -1,0 +1,31 @@
+# Dockerfile servicio DHCP
+FROM debian:latest
+
+# Variables necesarias para el funcionamiento del script startDHCP.sh
+# $IFACE = Interfaz que usará el serivicio para escuchar las peticiones 
+
+# Variables de entorno en el dockerfile
+ENV TZ Europe/Madrid
+ENV DEBIAN_FRONTEND noninteractive
+
+# Establecer la zona horaria
+RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone
+
+# Instalación de los paquetes necesarios para el servicio
+RUN apt update && apt install -yq \
+    # Servicio DHCP
+    isc-dhcp-server \
+    # Utilidades DHCP
+    dhcping \
+    dhcpd-pools \
+    # Limpiar caché de apt
+    && apt clean -yq
+
+# Copiar el directorio de configuración al contenedor
+COPY ./config /root/config
+
+# Exponer puerto del servicio DHCP
+EXPOSE 67/udp
+
+# Ejecutar el script de inicialización del servicio DHCP
+CMD [ "bash", "/root/config/startDHCP.sh" ]
