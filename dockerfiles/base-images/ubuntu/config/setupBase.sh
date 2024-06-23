@@ -67,13 +67,11 @@ main(){ # Función principal
     echo 'Variable $adminPassword no especificada, se utiliza el valor por defecto "adminsrv"'
     
     configAdminUser # Función creación de usuario administrador
-    resultadoConfigAdminUser=$? # Resultado de la función anterior
-    if [ $resultadoConfigAdminUser -eq 0 ] 
+    if [ $? -eq 0 ] 
     then
         # Éxito
         configSSH # Función de configuración del servicio SSH
-        resultadoConfigSSH=$? # Resultado de la función anterior
-        if [ $resultadoConfigSSH -eq 0 ]
+        if [ $? -eq 0 ]
         then
             # Éxito
             service ssh start
