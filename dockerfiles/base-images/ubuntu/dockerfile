@@ -1,0 +1,37 @@
+# Dockerfile imagen base de ubuntu
+FROM ubuntu:latest
+
+# Variables de entorno en el dockerfile
+ENV TZ Europe/Madrid
+ENV DEBIAN_FRONTEND noninteractive
+# Argumentos del dockerfile
+ARG adminUser
+ARG adminPassword
+
+# Establecer la zona horaria
+RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone
+
+# Actualizar lista de paquetes, actualizar paquetes y instalación de los paquetes bases
+RUN apt update && apt upgrade -y && apt install -yq \
+    # Gestión de ficheros
+    vim \
+    # Seguridad
+    sudo \
+    # Red
+    curl \
+    iputils-ping \
+    iproute2 \
+    openssh-server \
+    apt autoremove --purge -yq
+
+# Copiar los scripts de configuración base al contenedor
+COPY ./config /root/config
+
+# Exponer puerto ssh
+EXPOSE 22
+
+# Ejecutar el script de configuración de la imagen base
+RUN bash /root/config/setupBase.sh
+
+# Mantener el contenedor en ejecución
+CMD [ "tail", "-f", "/dev/null" ]
