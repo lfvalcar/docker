@@ -22,7 +22,7 @@ RUN apt update && apt upgrade -y && apt install -yq \
     iputils-ping \
     iproute2 \
     openssh-server \
-    apt autoremove --purge -yq
+    && apt autoremove --purge -yq
 
 # Copiar los scripts de configuración base al contenedor
 COPY ./config /root/config
