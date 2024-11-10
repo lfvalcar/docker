@@ -22,10 +22,11 @@ RUN apt update && apt install -yq \
     && apt clean -yq
 
 # Copiar el directorio de configuración al contenedor
-COPY ./config /root/config
+WORKDIR /setup/
+COPY ./start.sh /setup/
 
 # Exponer puerto del servicio DHCP
 EXPOSE 67/udp
 
 # Ejecutar el script de inicialización del servicio DHCP
-CMD [ "bash", "/root/config/startDHCP.sh" ]
+CMD [ "bash", "/setup/start.sh" ]

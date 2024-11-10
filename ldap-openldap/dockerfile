@@ -18,7 +18,7 @@ FROM ubuntu:latest
 # Variables del dockerfile
 ENV TZ Europe/Madrid
 ENV DEBIAN_FRONTEND noninteractive
-ENV dirConfig /root/config
+ENV dirConfig /setup
 
 # Establecer la zona horaria
 RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone
@@ -27,10 +27,11 @@ RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezo
 RUN apt update -yq && apt install debconf-utils -yq
 
 # Copiar archivos de configuración del demonio slapd
-COPY ./config ${dirConfig}
+WORKDIR ${dirConfig}
+COPY ./start.sh ${dirConfig}
 
 # Exponer puerto del servicio LDAP
 EXPOSE 139
 
 # Ejecutar el script de inicialización del servicio LDAP
-CMD [ "bash", "/root/config/startLDAP.sh" ]
+CMD [ "bash", "${dirConfig}/start.sh" ]

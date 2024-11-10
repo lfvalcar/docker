@@ -21,7 +21,8 @@ EXPOSE 53
 EXPOSE 53/udp
 
 # Copiar el script de configuración del servicio DNS en el directorio /root
-COPY ./config /root/config
+WORKDIR /setup/
+COPY ./start.sh /setup/
 
 # Ejecutar el script de inicialización del servicio DNS
-CMD [ "bash", "/root/config/startDNS.sh" ]
+CMD [ "bash", "/setup/start.sh" ]

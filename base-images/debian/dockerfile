@@ -25,13 +25,14 @@ RUN apt update && apt upgrade -y && apt install -yq \
     && apt autoremove --purge -yq
 
 # Copiar los scripts de configuración base al contenedor
-COPY ./config /root/config
+WORKDIR /setup/
+COPY ./setup.sh /setup/
 
 # Exponer puerto ssh
 EXPOSE 22
 
 # Ejecutar el script de configuración de la imagen base
-RUN bash /root/config/setupBase.sh
+RUN bash /setup/setup.sh
 
 # Mantener el contenedor en ejecución
 CMD [ "tail", "-f", "/dev/null" ]
